@@ -31,7 +31,7 @@ public class BicicletaController {
         if(bicicletas.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(bicicletas, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

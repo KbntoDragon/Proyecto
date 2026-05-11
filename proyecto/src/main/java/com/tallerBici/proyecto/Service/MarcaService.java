@@ -17,8 +17,9 @@ public class MarcaService {
     @Autowired
     private MarcaRepository marcaRepository;
 
-    public List<Marca> obtenerMarcas() {
-        return marcaRepository.findAll();
+    public List<MarcaDTO> obtenerMarcas() {
+        return marcaRepository.findAll().stream().map(this::convertirADTO).toList();
+
     }
 
     public MarcaDTO buscarPorId(Integer id) {

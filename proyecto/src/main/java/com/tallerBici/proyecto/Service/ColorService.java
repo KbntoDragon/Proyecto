@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tallerBici.proyecto.DTO.ColorDTO;
 import com.tallerBici.proyecto.Repository.ColorRepository;
 import com.tallerBici.proyecto.model.Color;
 
@@ -16,13 +17,14 @@ public class ColorService {
     @Autowired
     private ColorRepository colorRepository;
 
-    public List<Color> obtenerColores() {
-        return colorRepository.findAll();
+    public List<ColorDTO> obtenerColores() {
+        return colorRepository.findAll().stream().map(this::convertirADTO).toList();
     }
 
-    public Color buscarPorId(Integer id) {
-        return colorRepository.findById(id)
+    public ColorDTO buscarPorId(Integer id) {
+        Color color = colorRepository.findById(id)
                .orElseThrow(() -> new RuntimeException("Color no encontrado con id: " + id));
+               return convertirADTO(color);
     }
 
     public Color guardarColor(Color color) {
@@ -48,6 +50,21 @@ public class ColorService {
         }
         return null;
     }
+
+    public ColorDTO convertirADTO(Color color) {
+        ColorDTO dto = new ColorDTO();
+        dto.setId(color.getId());
+        dto.setNombre(color.getNombre());
+
+        if (color.getBicicletas() != null) {
+            dto.setBicicletas(color.getBicicletas().stream()
+                    .map(bicicletas -> bicicletas.getId())
+                    .toList());
+        }
+        return dto;
+    }
+
+
     
 
 }
